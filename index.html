@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Casa AR - WebXR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- A-Frame -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+
+  <!-- WebXR Hit Test -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+
+  <style>
+    body { margin: 0; overflow: hidden; }
+
+    #ui {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-family: Arial, sans-serif;
+      z-index: 10;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="ui">Toque no chão para posicionar a casa</div>
+
+<a-scene
+  renderer="colorManagement: true"
+  vr-mode-ui="enabled: false"
+  xr-mode-ui="enabled: true"
+  webxr="requiredFeatures: hit-test,local-floor; optionalFeatures: dom-overlay"
+  ar-hit-test="target:#reticle">
+
+  <a-assets>
+    <!-- CASA EM ESCALA REAL -->
+    <a-asset-item id="casa" src="src/glb/casa.glb"></a-asset-item>
+  </a-assets>
+
+  <!-- Câmera AR -->
+  <a-camera
+    position="0 1.6 0"
+    look-controls
+    wasd-controls="enabled: false">
+  </a-camera>
+
+  <!-- Retículo (mostra onde o chão foi detectado) -->
+  <a-entity
+    id="reticle"
+    geometry="primitive: ring; radiusInner: 0.08; radiusOuter: 0.1"
+    material="color: #00ff00; shader: flat"
+    rotation="-90 0 0"
+    visible="false">
+  </a-entity>
+
+  <!-- CASA -->
+  <a-gltf-model
+    id="casa-modelo"
+    src="#casa"
+    position="0 0 0"
+    scale="1 1 1"
+    rotation="0 0 0"
+    visible="false">
+  </a-gltf-model>
+
+</a-scene>
+
+<script>
+  const scene = document.querySelector('a-scene');
+  const reticle = document.querySelector('#reticle');
+  const casa = document.querySelector('#casa-modelo');
+  const ui = document.querySelector('#ui');
+
+  scene.addEventListener('loaded', () => {
+    scene.addEventListener('click', () => {
+      if (!reticle.object3D.visible) return;
+
+      const position = new THREE.Vector3();
+      reticle.object3D.getWorldPosition(position);
+
+      casa.setAttribute('position', position);
+      casa.setAttribute('visible', true);
+
+      ui.innerText = 'Casa posicionada em escala real';
+    });
+  });
+
+  // Atualiza visibilidade do retículo
+  scene.addEventListener('ar-hit-test-select', () => {
+    reticle.setAttribute('visible', true);
+  });
+</script>
+
+</body>
+</html>

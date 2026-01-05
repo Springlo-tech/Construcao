@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartão AR</title>
+
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.0/dist/mindar-image-aframe.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+
+  <style>
+    body { margin: 0; overflow: hidden; }
+
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      background: #333;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      text-align: center;
+    }
+
+    #start-button {
+      padding: 15px 30px;
+      background-color: #007bff;
+      color: white;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    #minha-cena { display: none; }
+  </style>
+</head>
+
+<body>
+
+  <!-- Splash Screen SEM LOGO -->
+  <div id="splash-screen">
+    <h2>Bem-vindo</h2>
+    <p>Toque para iniciar a experiência de Realidade Aumentada</p>
+    <button id="start-button">Iniciar</button>
+  </div>
+
+  <!-- Cena AR -->
+  <a-scene
+    id="minha-cena"
+    mindar-image="imageTargetSrc: markers/targets_BAPC.mind; maxTrack: 1;"
+    color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
+
+    <a-assets>
+      
+      <a-asset-item id="modeloA" src="src/glb/teste.glb"></a-asset-item>
+      <a-asset-item id="modeloB" src="src/glb/teste.glb"></a-asset-item>
+      <a-asset-item id="modeloC" src="src/glb/teste.glb"></a-asset-item>
+      <a-asset-item id="modeloD" src="src/glb/teste.glb"></a-asset-item>
+    </a-assets>
+
+    <a-camera position="0 0 -5" look-controls="enabled: false"></a-camera>
+
+    <a-entity mindar-image-target="targetIndex: 0" id="targetA">
+      <a-plane src="#background-img" width="1.11" height="1.52" position="0 0 -0.2"></a-plane>
+      <a-gltf-model id="modelo-0" src="#modeloA" scale="0.5 0.5 0.5"
+        position="0.1 0 0.2" visible="false" animation-mixer>
+      </a-gltf-model>
+    </a-entity>
+
+    <a-entity mindar-image-target="targetIndex: 1" id="targetB">
+      <a-plane src="#background-img" width="1.11" height="1.52" position="0 0 -0.2"></a-plane>
+      <a-gltf-model id="modelo-1" src="#modeloB" scale="0.5 0.5 0.5"
+        position="0 0 0.2" visible="false" animation-mixer color-cycle-opt>
+      </a-gltf-model>
+    </a-entity>
+
+    <a-entity mindar-image-target="targetIndex: 2" id="targetC">
+      <a-plane src="#background-img" width="1.11" height="1.52" position="0 0 -0.2"></a-plane>
+      <a-gltf-model id="modelo-2" src="#modeloC" scale="0.5 0.5 0.5"
+        position="0 0 0.2" visible="false" animation-mixer>
+      </a-gltf-model>
+    </a-entity>
+
+    <a-entity mindar-image-target="targetIndex: 3" id="targetD">
+      <a-plane src="#background-img2" width="1.11" height="1.65" position="0 0 -0.2"></a-plane>
+      <a-gltf-model id="modelo-3" src="#modeloD" scale="0.5 0.5 0.5"
+        position="0.1 0 0.2" visible="false" animation-mixer>
+      </a-gltf-model>
+    </a-entity>
+
+  </a-scene>
+
+  <script>
+    // Componente de ciclo de cor
+    AFRAME.registerComponent('color-cycle-opt', {
+      schema: {
+        colors: { type: 'array', default: ['#ff0000', '#0000ff', '#000000'] },
+        interval: { type: 'number', default: 1000 }
+      },
+      init() {
+        this.index = 0;
+        this.materials = [];
+
+        this.el.addEventListener('model-loaded', () => {
+          const mesh = this.el.getObject3D('mesh');
+          if (!mesh) return;
+
+          mesh.traverse(node => {
+            if (node.isMesh && node.material) {
+              const mats = Array.isArray(node.material) ? node.material : [node.material];
+              this.materials.push(...mats);
+            }
+          });
+
+          setInterval(() => this.cycle(), this.data.interval);
+        });
+      },
+      cycle() {
+        const color = this.data.colors[this.index];
+        this.materials.forEach(m => {
+          if (color === '#000000') {
+            m.emissive.set(0x000000);
+            m.emissiveIntensity = 0;
+          } else {
+            m.emissive.set(color);
+            m.emissiveIntensity = 1;
+          }
+        });
+        this.index = (this.index + 1) % this.data.colors.length;
+      }
+    });
+
+    // Inicialização
+    document.getElementById('start-button').addEventListener('click', () => {
+      document.getElementById('splash-screen').style.display = 'none';
+      document.getElementById('minha-cena').style.display = 'block';
+    });
+
+    function setupTarget(targetId, modelId) {
+      const target = document.querySelector(targetId);
+      const model = document.querySelector(modelId);
+
+      target.addEventListener('targetFound', () => {
+        model.setAttribute('visible', true);
+        model.setAttribute('animation-mixer', 'timeScale', 1);
+      });
+
+      target.addEventListener('targetLost', () => {
+        model.setAttribute('visible', false);
+        model.setAttribute('animation-mixer', 'timeScale', 0);
+      });
+    }
+
+    setupTarget('#targetA', '#modelo-0');
+    setupTarget('#targetB', '#modelo-1');
+    setupTarget('#targetC', '#modelo-2');
+    setupTarget('#targetD', '#modelo-3');
+  </script>
+
+</body>
+</html>
