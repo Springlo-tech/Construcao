@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <title>Casa AR - WebXR</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 
-  <!-- WebXR Hit Test -->
-  <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+  <!-- WebXR Hit Test Component -->
+  <script src="https://unpkg.com/aframe-ar-hit-test@1.1.0/dist/aframe-ar-hit-test.min.js"></script>
 
   <style>
     body { margin: 0; overflow: hidden; }
@@ -19,10 +19,10 @@
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0,0,0,0.6);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 12px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 10px;
       font-family: Arial, sans-serif;
       z-index: 10;
     }
@@ -31,31 +31,30 @@
 
 <body>
 
-<div id="ui">Toque no chão para posicionar a casa</div>
+<div id="ui">Aponte para o chão e toque para posicionar a casa</div>
 
 <a-scene
   renderer="colorManagement: true"
   vr-mode-ui="enabled: false"
-  xr-mode-ui="enabled: true"
-  webxr="requiredFeatures: hit-test,local-floor; optionalFeatures: dom-overlay"
+  webxr="requiredFeatures: hit-test,local-floor"
   ar-hit-test="target:#reticle">
 
   <a-assets>
-    <!-- CASA EM ESCALA REAL -->
-    <a-asset-item id="casa" src="src/glb/casa.glb"></a-asset-item>
+    <!-- SUA CASA EM ESCALA REAL -->
+    <a-asset-item id="casa" src="src/glb/teste.glb"></a-asset-item>
   </a-assets>
 
-  <!-- Câmera AR -->
+  <!-- Câmera -->
   <a-camera
     position="0 1.6 0"
     look-controls
     wasd-controls="enabled: false">
   </a-camera>
 
-  <!-- Retículo (mostra onde o chão foi detectado) -->
+  <!-- RETÍCULO VERDE (PLANO DETECTADO) -->
   <a-entity
     id="reticle"
-    geometry="primitive: ring; radiusInner: 0.08; radiusOuter: 0.1"
+    geometry="primitive: ring; radiusInner: 0.06; radiusOuter: 0.08"
     material="color: #00ff00; shader: flat"
     rotation="-90 0 0"
     visible="false">
@@ -65,37 +64,27 @@
   <a-gltf-model
     id="casa-modelo"
     src="#casa"
-    position="0 0 0"
-    scale="1 1 1"
-    rotation="0 0 0"
-    visible="false">
+    visible="false"
+    scale="1 1 1">
   </a-gltf-model>
 
 </a-scene>
 
 <script>
-  const scene = document.querySelector('a-scene');
   const reticle = document.querySelector('#reticle');
   const casa = document.querySelector('#casa-modelo');
   const ui = document.querySelector('#ui');
 
-  scene.addEventListener('loaded', () => {
-    scene.addEventListener('click', () => {
-      if (!reticle.object3D.visible) return;
+  document.body.addEventListener('click', () => {
+    if (!reticle.object3D.visible) return;
 
-      const position = new THREE.Vector3();
-      reticle.object3D.getWorldPosition(position);
+    const pos = new THREE.Vector3();
+    reticle.object3D.getWorldPosition(pos);
 
-      casa.setAttribute('position', position);
-      casa.setAttribute('visible', true);
+    casa.setAttribute('position', pos);
+    casa.setAttribute('visible', true);
 
-      ui.innerText = 'Casa posicionada em escala real';
-    });
-  });
-
-  // Atualiza visibilidade do retículo
-  scene.addEventListener('ar-hit-test-select', () => {
-    reticle.setAttribute('visible', true);
+    ui.innerText = 'Casa posicionada em escala real';
   });
 </script>
 
