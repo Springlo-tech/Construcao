@@ -8,11 +8,30 @@
   <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 
-  <!-- WebXR Hit Test Component -->
+  <!-- WebXR Hit Test -->
   <script src="https://unpkg.com/aframe-ar-hit-test@1.1.0/dist/aframe-ar-hit-test.min.js"></script>
 
   <style>
-    body { margin: 0; overflow: hidden; }
+    body { margin: 0; overflow: hidden; background: black; }
+
+    #start {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: black;
+      z-index: 10;
+    }
+
+    #start button {
+      padding: 16px 28px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: none;
+      background: #00c853;
+      color: #fff;
+    }
 
     #ui {
       position: fixed;
@@ -24,38 +43,44 @@
       padding: 10px 16px;
       border-radius: 10px;
       font-family: Arial, sans-serif;
-      z-index: 10;
+      z-index: 5;
+      display: none;
     }
   </style>
 </head>
 
 <body>
 
-<div id="ui">Aponte para o chão e toque para posicionar a casa</div>
+<!-- TELA INICIAL (OBRIGATÓRIA) -->
+<div id="start">
+  <button id="start-ar">Iniciar AR</button>
+</div>
+
+<div id="ui">Aponte para o chão e mova o celular</div>
 
 <a-scene
+  embedded
   renderer="colorManagement: true"
   vr-mode-ui="enabled: false"
   webxr="requiredFeatures: hit-test,local-floor"
-  ar-hit-test="target:#reticle">
+  ar-hit-test="target:#reticle"
+  style="display:none">
 
   <a-assets>
-    <!-- SUA CASA EM ESCALA REAL -->
-    <a-asset-item id="casa" src="src/glb/teste.glb"></a-asset-item>
+    <a-asset-item id="casa" src="src/glb/casa.glb"></a-asset-item>
   </a-assets>
 
-  <!-- Câmera -->
   <a-camera
     position="0 1.6 0"
     look-controls
-    wasd-controls="enabled: false">
+    wasd-controls="enabled:false">
   </a-camera>
 
-  <!-- RETÍCULO VERDE (PLANO DETECTADO) -->
+  <!-- RETÍCULO -->
   <a-entity
     id="reticle"
-    geometry="primitive: ring; radiusInner: 0.06; radiusOuter: 0.08"
-    material="color: #00ff00; shader: flat"
+    geometry="primitive:ring; radiusInner:0.06; radiusOuter:0.08"
+    material="color:#00ff00; shader:flat"
     rotation="-90 0 0"
     visible="false">
   </a-entity>
@@ -71,12 +96,26 @@
 </a-scene>
 
 <script>
-  const reticle = document.querySelector('#reticle');
-  const casa = document.querySelector('#casa-modelo');
-  const ui = document.querySelector('#ui');
+  const startBtn = document.getElementById('start-ar');
+  const startScreen = document.getElementById('start');
+  const scene = document.querySelector('a-scene');
+  const ui = document.getElementById('ui');
+  const reticle = document.getElementById('reticle');
+  const casa = document.getElementById('casa-modelo');
+
+  startBtn.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    scene.style.display = 'block';
+    ui.style.display = 'block';
+
+    scene.enterAR();
+  });
 
   document.body.addEventListener('click', () => {
-    if (!reticle.object3D.visible) return;
+    if (!reticle.object3D.visible) {
+      ui.innerText = 'Movimente o celular para detectar o chão';
+      return;
+    }
 
     const pos = new THREE.Vector3();
     reticle.object3D.getWorldPosition(pos);
