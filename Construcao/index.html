@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartão AR - Personalizado</title>
+
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.0/dist/mindar-image-aframe.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #splash-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #333; color: white; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; z-index: 9999;
+      text-align: center;
+    }
+    #start-button {
+      padding: 15px 30px;
+      background-color: #007bff;
+      color: white; font-size: 1.1em;
+      border: none; border-radius: 8px;
+      cursor: pointer; margin-top: 15px;
+    }
+    #logo-cliente { /* ID alterado para diferenciar do <a-assets> */
+      width: 120px;
+      margin-bottom: 20px;
+    }
+    #minha-cena { display: none; }
+  </style>
+</head>
+
+<body>
+
+  <div id="splash-screen">
+    <img id="logo-cliente" src="" alt="Logo Personalizado">
+    <h2 id="titulo-cliente"></h2>
+    <p>Toque para iniciar a câmera e ativar o som</p>
+    <button id="start-button">Iniciar</button>
+  </div>
+
+  <div id="hint">Aponte a câmera para a imagem do manual</div>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    #ui-buttons {
+      position: fixed;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      z-index: 9999;
+    }
+
+    #ui-buttons button {
+      padding: 12px 18px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #0d6efd;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #ui-buttons button:hover {
+      background: #084298;
+    }
+
+    #hint {
+      position: fixed;
+      top: 12px;
+      width: 100%;
+      text-align: center;
+      color: #fff;
+      background: rgba(0,0,0,0.5);
+      padding: 8px;
+      font-size: 14px;
+      z-index: 9999;
+    }
+  </style>
+  <!-- BOTÕES -->
+  <div id="ui-buttons">
+    <button onclick="mostrarModelo('visual')">Visual</button>
+    <button onclick="mostrarModelo('montagem')">Montagem</button>
+    <button onclick="mostrarModelo('tecnico')">Técnico</button>
+  </div>
+
+  <a-scene
+    id="minha-cena"
+    mindar-image="imageTargetSrc: markers/ralo160.mind; maxTrack: 1;" 
+    color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
+
+    <a-assets>
+      <img id="logo-dinamico" src="" crossorigin="anonymous" />
+      <img id="background-img" src="assets/imagens/FundoCartao.jpeg" crossorigin="anonymous" />
+      <img id="background-img2" src="assets/imagens/FundoConvite.jpg" crossorigin="anonymous" />
+      <audio id="som1" src="assets/musicas/natal.mp3" preload="auto"></audio>
+      <audio id="som2" src="assets/musicas/natal.mp3" preload="auto"></audio>
+      <audio id="som3" src="assets/musicas/natal.mp3" preload="auto"></audio>
+      <audio id="som4" src="assets/musicas/casamento.mp3" preload="auto"></audio>
+
+
+      <a-asset-item id="modeloA" src="assets/modelos/bonecoNeve.glb"></a-asset-item>
+      <a-asset-item id="modeloB" src="assets/modelos/arvoreNatal.glb"></a-asset-item>
+      <a-asset-item id="modeloC" src="assets/modelos/presente.glb"></a-asset-item>
+      <a-asset-item id="modeloD" src="assets/modelos/noivos.glb"></a-asset-item>
+
+    </a-assets>
+
+    <a-camera position="0 0 -5" look-controls="enabled: false"></a-camera>
+   
+    <a-entity mindar-image-target="targetIndex: 0" id="targetA">
+
+  <a-plane src="#background-img"
+           width="1.11" height="1.52"
+           position="0 0 -0.2"
+           material="transparent: true; opacity: 1;">
+  </a-plane>
+
+  <!-- VISUAL -->
+  <a-gltf-model 
+      id="modelo-visual"
+      src="#modeloA"
+      scale="0.5 0.5 0.5"
+      position="0 0 0.2"
+      visible="true">
+  </a-gltf-model>
+
+  <!-- MONTAGEM -->
+  <a-gltf-model 
+      id="modelo-montagem"
+      src="#modeloB"
+      scale="0.5 0.5 0.5"
+      position="0 0 0.2"
+      visible="false">
+  </a-gltf-model>
+
+  <!-- TÉCNICO -->
+  <a-gltf-model 
+      id="modelo-tecnico"
+      src="#modeloC"
+      scale="0.5 0.5 0.5"
+      position="0 0 0.2"
+      visible="false">
+  </a-gltf-model>
+
+</a-entity>
+
+
+   
+
+    
+
+    
+  </a-scene>
+
+  <script>
+      // --- PASSO 1: DEFINIÇÃO DO COMPONENTE OTIMIZADO (color-cycle-opt) ---
+     AFRAME.registerComponent('color-cycle-opt', {
+     schema: {
+     colors: {type: 'array', default: ['#ff0000', '#00ff00', '#0000ff'], parse: AFRAME.utils.styleParser.toArray},
+     interval: {type: 'number', default: 5000}
+     },
+     init: function () {
+       this.colorIndex = 0;
+       this.materials = [];
+       this.intervalId = null;
+       this.el.addEventListener('model-loaded', this.setupMaterials.bind(this));
+     },
+     setupMaterials: function () {
+       const model = this.el.getObject3D('mesh');
+       if (!model) return;
+       this.materials = [];
+       model.traverse((node) => {
+         if (node.isMesh && node.material) {
+          const nodeMaterials = Array.isArray(node.material) ? node.material : [node.material];
+          this.materials.push(...nodeMaterials);
+          }
+       });
+       if (this.intervalId) {
+           clearInterval(this.intervalId);
+        }
+       this.intervalId = setInterval(this.cycleColor.bind(this), this.data.interval);
+       this.cycleColor();
+       console.log(`Ciclo de cor iniciado com ${this.materials.length} materiais.`);
+     },
+     cycleColor: function () {
+       if (this.materials.length === 0) return;
+       const newColor = this.data.colors[this.colorIndex];
+
+       this.materials.forEach(material => {
+       // Se for a cor preta, desligamos a emissão para mostrar a cor original
+          if (newColor === '#000000') {
+               material.emissive.set(0x000000);
+               material.emissiveIntensity = 0;
+          } else {
+          // Aplicamos a cor emissiva normalmente
+               material.emissive.set(newColor);
+               material.emissiveIntensity = 1;
+          }
+      });
+
+      this.colorIndex = (this.colorIndex + 1) % this.data.colors.length;
+     },
+     remove: function () {
+       if (this.intervalId) {
+          clearInterval(this.intervalId);
+     }
+}
+});
+
+    // --- Lógica de Personalização ---
+
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    const clienteParam = getQueryParam('cliente');
+    let logoPath = 'assets/imagens/logo-B.png'; // Padrão
+    let titulo = '';//'Cartão de Natal AR';
+
+    // Mapeamento dos clientes para o caminho do logo e título
+    switch (clienteParam ? clienteParam.toUpperCase() : '') {
+      case 'A':
+        logoPath = 'assets/imagens/logo-A.png'; 
+        titulo = 'Presente de Natal - Cliente A';
+        break;
+      case 'B':
+        logoPath = 'assets/imagens/logo-B.png'; 
+        titulo = 'Boas Festas - Cliente B';
+        break;
+      case 'C':
+         logoPath = 'assets/imagens/logo-B.png'; 
+        titulo = 'Feliz Natal - Cliente C';
+        break;
+      case 'D':
+         logoPath = 'assets/imagens/logo-B.png'; 
+        titulo = 'Feliz Natal - Cliente D';
+        break;
+      default:
+        // Caso não tenha parâmetro
+        break;
+    }
+
+    // Aplica a personalização nos elementos da página (Splash Screen e A-Assets)
+    document.getElementById('logo-cliente').src = logoPath;
+    document.getElementById('titulo-cliente').textContent = titulo;
+    document.getElementById('logo-dinamico').src = logoPath;
+    // --- Lógica de Inicialização e AR (Original) ---
+    const splash = document.getElementById('splash-screen');
+    const startBtn = document.getElementById('start-button');
+    const scene = document.getElementById('minha-cena');
+    // Sons (Mantido)
+    const audios = [
+      new Audio('assets/musicas/natal.mp3'), // Índice 0
+      new Audio('assets/musicas/natal.mp3'), // Índice 1
+      new Audio('assets/musicas/natal.mp3'),  // Índice 2
+      new Audio('assets/musicas/casamento.mp3')  // Índice 2
+    ];
+    audios.forEach(a => a.loop = true);
+
+    startBtn.addEventListener('click', () => {
+      splash.style.display = 'none';
+      scene.style.display = 'block';
+    });
+
+    // Função para controle de som, visibilidade e animação (Mantida)
+    function setupTarget(targetId, modeloId, audioIndex) {
+      const target = document.querySelector(targetId);
+      const modelo = document.querySelector(modeloId);
+      const audio = audios[audioIndex];
+
+      target.addEventListener('targetFound', () => {
+        modelo.setAttribute('animation-mixer', 'timeScale', 1);
+        modelo.setAttribute('visible', 'true');
+
+        // APENAS PARA A ÁRVORE (MODELO B): INICIA O CICLO DE COR
+        if (modeloId === '#modelo-1') { 
+           modelo.setAttribute('color-cycle-opt', 'interval', 1000); // Garante que o componente inicia ao encontrar
+        }
+        audios.forEach((a, i) => { if (i !== audioIndex) a.pause(); });
+        audio.currentTime = 0;
+        audio.play();
+      });
+
+      target.addEventListener('targetLost', () => {
+        modelo.setAttribute('animation-mixer', 'timeScale', 0);
+        modelo.setAttribute('visible', 'false');
+        audio.pause();
+      });
+    }
+
+    // Mapeamento (Mantido)
+    setupTarget('#targetA', '#modelo-0', 0);
+    setupTarget('#targetB', '#modelo-1', 1);
+    setupTarget('#targetC', '#modelo-2', 2);
+    setupTarget('#targetD', '#modelo-3', 3);
+  </script>
+
+  <script>
+  const modelos = {
+    visual: document.getElementById('modelo-visual'),
+    montagem: document.getElementById('modelo-montagem'),
+    tecnico: document.getElementById('modelo-tecnico')
+  };
+
+  function mostrarModelo(tipo) {
+    Object.values(modelos).forEach(m => {
+      m.setAttribute('visible', 'false');
+    });
+
+    modelos[tipo].setAttribute('visible', 'true');
+  }
+</script>
+</body>
+</html>
