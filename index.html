@@ -90,9 +90,9 @@ body { margin:0; overflow:hidden; font-family: Arial, sans-serif; }
   style="display:none">
 
   <a-assets>
-    <img id="bg" src="assets/imagens/FundoCartao.jpeg">
+    
     <a-asset-item id="glb-visual" src="assets/modelos/ralo160.glb"></a-asset-item>
-    <a-asset-item id="glb-montagem" src="assets/modelos/arvoreNatal.glb"></a-asset-item>
+    <a-asset-item id="glb-montagem" src="assets/modelos/ralo160_montagem.glb"></a-asset-item>
     <a-asset-item id="glb-tecnico" src="assets/modelos/presente.glb"></a-asset-item>
   </a-assets>
 
@@ -104,12 +104,13 @@ body { margin:0; overflow:hidden; font-family: Arial, sans-serif; }
     <a-plane src="#bg" width="1.11" height="1.52" position="0 0 -0.2"></a-plane>
 
     <a-gltf-model id="modelo-visual" src="#glb-visual"
-      position="0 0 0.0" scale="3.0 3.0 3.0" rotation="90 0 0" visible="true">
+      position="0 0 -0.2" scale="5.0 5.0 5.0" rotation="90 0 0" visible="true">
       
     </a-gltf-model>
 
     <a-gltf-model id="modelo-montagem" src="#glb-montagem"
-      position="0 0 0.3" scale="0.5 0.5 0.5" rotation="90 0 0" visible="false">
+      position="0 0 0.3" scale="5.0 5.0 5.0" rotation="90 0 0" visible="false"
+       animation-mixer="loop: repeat; timeScale: 1">
     </a-gltf-model>
 
     <a-gltf-model id="modelo-tecnico" src="#glb-tecnico"
