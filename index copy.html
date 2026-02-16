@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AR – Troca de Modelo</title>
+
+<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.0/dist/mindar-image-aframe.prod.js"></script>
+
+<style>
+body { margin:0; overflow:hidden; font-family: Arial, sans-serif; }
+
+#splash-screen {
+  position: fixed;
+  inset: 0;
+  background: #333;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+#start-button {
+  padding: 14px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #0d6efd;
+  color: #fff;
+  cursor: pointer;
+}
+
+#ui-buttons {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  z-index: 5;
+}
+
+#ui-buttons button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #0d6efd;
+  color: #fff;
+  cursor: pointer;
+}
+
+#hint {
+  position: fixed;
+  top: 12px;
+  width: 100%;
+  text-align: center;
+  background: rgba(0,0,0,.5);
+  color: #fff;
+  padding: 8px;
+  z-index: 5;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<div id="splash-screen">
+  <h2>Toque para iniciar</h2>
+  <button id="start-button">Iniciar</button>
+</div>
+
+<div id="hint">Aponte a câmera para a imagem</div>
+
+<!-- BOTÕES -->
+<div id="ui-buttons">
+  <button onclick="mostrarModelo('visual')">Visual</button>
+  <button onclick="mostrarModelo('montagem')">Montagem</button>
+  <button onclick="mostrarModelo('tecnico')">Técnico</button>
+</div>
+
+<a-scene
+  id="scene"
+  mindar-image="imageTargetSrc: markers/ralo160.mind; maxTrack: 1"
+  vr-mode-ui="enabled:false"
+  device-orientation-permission-ui="enabled:false"
+  style="display:none">
+
+  <a-assets>
+    
+    <a-asset-item id="glb-visual" src="assets/modelos/cano.glb"></a-asset-item>
+    <a-asset-item id="glb-montagem" src="assets/modelos/ralo160_montagem.glb"></a-asset-item>
+    <a-asset-item id="glb-tecnico" src="assets/modelos/presente.glb"></a-asset-item>
+  </a-assets>
+
+  <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+
+  <!-- TARGET ÚNICO -->
+  <a-entity mindar-image-target="targetIndex:0">
+
+   <!-- <a-plane src="#bg" width="1.11" height="1.52" position="0 0 -0.2"></a-plane>-->
+
+    <a-gltf-model id="modelo-visual" src="#glb-visual"
+      position="0 0 -0.2" scale="6.0 6.0 6.0" rotation="0 0 0" visible="true"
+        animation-mixer="clip: *; loop: repeat; timeScale: 1">
+
+      
+    </a-gltf-model>
+
+    <a-gltf-model id="modelo-montagem" src="#glb-montagem"
+      position="0 0 0.3" scale="3.0 3.0 3.0" rotation="0 0 0" visible="false"
+       animation-mixer="clip: *; loop: repeat; timeScale: 1">
+
+    </a-gltf-model>
+
+    <a-gltf-model id="modelo-tecnico" src="#glb-tecnico"
+      position="0 0 0.3" scale="0.5 0.5 0.5" rotation="90 0 0" visible="false"
+      animation-mixer="clip: *; loop: repeat; timeScale: 0">
+    </a-gltf-model>
+
+  </a-entity>
+</a-scene>
+
+<script>
+const splash = document.getElementById('splash-screen');
+const scene = document.getElementById('scene');
+
+document.getElementById('start-button').onclick = () => {
+  splash.style.display = 'none';
+  scene.style.display = 'block';
+};
+
+const modelos = {
+  visual: document.getElementById('modelo-visual'),
+  montagem: document.getElementById('modelo-montagem'),
+  tecnico: document.getElementById('modelo-tecnico')
+};
+
+function mostrarModelo(tipo) {
+  Object.values(modelos).forEach(m => m.setAttribute('visible', false));
+  modelos[tipo].setAttribute('visible', true);
+}
+</script>
+
+</body>
+</html>
