@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR – Manual Construtora</title>
+    <title>AR Manual Construtora</title>
 
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
@@ -63,8 +63,8 @@
         device-orientation-permission-ui="enabled:false">
 
         <a-assets>
-            <img id="moldura-img" src="assets/imagens/moldura.png">
-            <a-asset-item id="glb-visual" src="assets/modelos/cano.glb"></a-asset-item>
+          <!--  <img id="moldura-img" src="assets/imagens/moldura.png">-->
+            <a-asset-item id="glb-visual" src="assets/modelos/cadeira.glb"></a-asset-item>
             <a-asset-item id="glb-montagem" src="assets/modelos/ralo160_montagem.glb"></a-asset-item>
             <a-asset-item id="glb-tecnico" src="assets/modelos/presente.glb"></a-asset-item>
         </a-assets>
@@ -72,10 +72,10 @@
         <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
 
         <a-entity id="target-principal" mindar-image-target="targetIndex:0">
-            <a-plane id="wireframe" src="#moldura-img" width="1" height="1" position="0 0 0" material="transparent: true; opacity: 0.9"></a-plane>
+          <!-- <a-plane id="wireframe" src="#moldura-img" width="1" height="1" position="0 0 0" material="transparent: true; opacity: 0.9"></a-plane>-->
             
             <a-entity id="container-modelos">
-                <a-gltf-model id="modelo-visual" src="#glb-visual" position="1 0 -0.2" scale="8 8 8" visible="true"></a-gltf-model>
+                <a-gltf-model id="modelo-visual" src="#glb-visual" position="0 0 -0.2" scale="0.3 0.3 0.3" rotation="90 0 0" visible="true" animation-mixer="clip: *; loop: repeat; timeScale: 0.5"></a-gltf-model>></a-gltf-model>
                 <a-gltf-model id="modelo-montagem" src="#glb-montagem" position="0 0 0.3" scale="3 3 3" visible="false"></a-gltf-model>
                 <a-gltf-model id="modelo-tecnico" src="#glb-tecnico" position="0 0 0.3" scale="0.5 0.5 0.5" rotation="90 0 0" visible="false"></a-gltf-model>
             </a-entity>
