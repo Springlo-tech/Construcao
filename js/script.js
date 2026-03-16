@@ -37,16 +37,16 @@ window.onload = () => {
         }
     });
 
-    btnTravar.onclick = () => {
-        estaTravado = true;
-        btnTravar.style.display = "none";
-        btnReset.style.display = "block";
-        wireframe.setAttribute('visible', false);
-        hint.innerText = "POSIÇÃO FIXADA";
+   // btnTravar.onclick = () => {
+   //     estaTravado = true;
+   //     btnTravar.style.display = "none";
+   //     btnReset.style.display = "block";
+   //     wireframe.setAttribute('visible', false);
+   //     hint.innerText = "POSIÇÃO FIXADA";
         
         // Para o rastreio para "congelar" o modelo no lugar
-        sceneEl.systems['mindar-image-system'].stop();
-    };
+    //    sceneEl.systems['mindar-image-system'].stop();
+  //  };
 
     btnReset.onclick = () => {
         estaTravado = false;

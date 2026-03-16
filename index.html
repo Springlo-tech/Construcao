@@ -49,7 +49,7 @@
     <div id="hint">Clique em iniciar para ativar a câmera</div>
 
     <div id="ui-buttons">
-        <button id="btn-travar">CONFIRMAR POSIÇÃO</button>
+        <!--<button id="btn-travar">CONFIRMAR POSIÇÃO</button>-->
         <button id="btn-reset">REPETIR ALINHAMENTO</button>
         <button onclick="mostrarModelo('visual')">Visual</button>
         <button onclick="mostrarModelo('montagem')">Montagem</button>
@@ -65,7 +65,7 @@
         <a-assets>
           <!--  <img id="moldura-img" src="assets/imagens/moldura.png">-->
             <a-asset-item id="glb-visual" src="assets/modelos/cadeira.glb"></a-asset-item>
-            <a-asset-item id="glb-montagem" src="assets/modelos/ralo160_montagem.glb"></a-asset-item>
+            <a-asset-item id="glb-montagem" src="assets/modelos/cadeira.glb"></a-asset-item>
             <a-asset-item id="glb-tecnico" src="assets/modelos/presente.glb"></a-asset-item>
         </a-assets>
 
@@ -75,8 +75,8 @@
           <!-- <a-plane id="wireframe" src="#moldura-img" width="1" height="1" position="0 0 0" material="transparent: true; opacity: 0.9"></a-plane>-->
             
             <a-entity id="container-modelos">
-                <a-gltf-model id="modelo-visual" src="#glb-visual" position="0 0 -0.2" scale="0.3 0.3 0.3" rotation="90 0 0" visible="true" animation-mixer="clip: *; loop: repeat; timeScale: 0.5"></a-gltf-model>></a-gltf-model>
-                <a-gltf-model id="modelo-montagem" src="#glb-montagem" position="0 0 0.3" scale="3 3 3" visible="false"></a-gltf-model>
+                <a-gltf-model id="modelo-visual" src="#glb-visual" position="0 0 0" scale="0.3 0.3 0.3" rotation="90 0 0" visible="true" ></a-gltf-model>></a-gltf-model>
+                <a-gltf-model id="modelo-montagem" src="#glb-montagem" position="0 0 0" scale="0.3 0.3 0.3" rotation="90 0 0" visible="false" animation-mixer="clip: *; loop: repeat; timeScale: 0.5"></a-gltf-model>></a-gltf-model>
                 <a-gltf-model id="modelo-tecnico" src="#glb-tecnico" position="0 0 0.3" scale="0.5 0.5 0.5" rotation="90 0 0" visible="false"></a-gltf-model>
             </a-entity>
         </a-entity>
