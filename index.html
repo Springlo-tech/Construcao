@@ -66,7 +66,7 @@
           <!--  <img id="moldura-img" src="assets/imagens/moldura.png">-->
             <a-asset-item id="glb-visual" src="assets/modelos/cadeira.glb"></a-asset-item>
             <a-asset-item id="glb-montagem" src="assets/modelos/cadeira.glb"></a-asset-item>
-            <a-asset-item id="glb-tecnico" src="assets/modelos/presente.glb"></a-asset-item>
+            <a-asset-item id="glb-tecnico" src="assets/modelos/cadeira.glb"></a-asset-item>
         </a-assets>
 
         <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
@@ -75,11 +75,33 @@
           <!-- <a-plane id="wireframe" src="#moldura-img" width="1" height="1" position="0 0 0" material="transparent: true; opacity: 0.9"></a-plane>-->
             
             <a-entity id="container-modelos">
-                <a-gltf-model id="modelo-visual" src="#glb-visual" position="0 0 0" scale="0.3 0.3 0.3" rotation="90 0 0" visible="true" ></a-gltf-model>></a-gltf-model>
-                <a-gltf-model id="modelo-montagem" src="#glb-montagem" position="0 0 0" scale="0.3 0.3 0.3" rotation="90 0 0" visible="false" animation-mixer="clip: *; loop: repeat; timeScale: 0.5"></a-gltf-model>></a-gltf-model>
-                <a-gltf-model id="modelo-tecnico" src="#glb-tecnico" position="0 0 0.3" scale="0.5 0.5 0.5" rotation="90 0 0" visible="false"></a-gltf-model>
-            </a-entity>
+                <a-gltf-model id="modelo-visual" src="#glb-visual" position="-0 0 0.3" scale="0.3 0.3 0.3" rotation="90 0 0" visible="true" ></a-gltf-model>></a-gltf-model>
+                <a-gltf-model id="modelo-montagem" src="#glb-montagem" position="0 0 0" scale="0.3 0.3 0.3" rotation="90 30 0" visible="false" animation-mixer="clip: *; loop: repeat; timeScale: 0.5"></a-gltf-model>></a-gltf-model>
+                <a-entity id="modelo-tecnico" visible="false">
+                    <a-gltf-model src="#glb-tecnico" position="0 0 0.3" scale="0.3 0.3 0.3" rotation="90 0 0"></a-gltf-model>
+
+                    <a-entity id="painel-ui" position="0.9 0 0.4" rotation="90 0 0">
+                        <a-plane width="0.9" height="1.2" color="#000" opacity="0.8" material="transparent:true"></a-plane>
+                        
+                        <a-text value="ESPECIFICACOES" align="center" position="0 0.5 0.02" scale="0.25 0.25 0.25" color="#0d6efd"></a-text>
+                        
+                        <a-text 
+                            value="MODELO: Trieste - Dobue\nESTRUTURA: MDF / Veluplus\n\nDIMENSOES:\nA: 92cm | L: 42cm | P: 60cm\n\nPESO: 7,30kg (unidade)\nSUPORTA: Ate 110kg\n\nMANUTENCAO:\nPano levemente umido.\nNao usar abrasivos." 
+                            align="left" 
+                            position="-0.4 0 0.02" 
+                            scale="0.18 0.18 0.18" 
+                            color="#fff" 
+                            line-height="50">
+                        </a-text>
+                        
+                        <a-text value="GARANTIA: 3 MESES" align="center" position="0 -0.5 0.02" scale="0.15 0.15 0.15" color="#aaa"></a-text>
+                    </a-entity>
+
+                    <a-entity line="start: -0.3 -0.46 0.3; end: -0.3 0.46 0.3; color: #0d6efd"></a-entity>
+                    <a-text value="92cm" position="-0.45 0 0.3" rotation="90 0 0" scale="0.15 0.15 0.15" color="#0d6efd"></a-text>
+                </a-entity>
         </a-entity>
+        
     </a-scene>
 
    
