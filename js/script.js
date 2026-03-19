@@ -17,7 +17,7 @@ window.onload = () => {
         // Verifica se o sistema de imagem do MindAR está pronto antes de iniciar
         if (sceneEl.systems['mindar-image-system']) {
             sceneEl.systems['mindar-image-system'].start();
-            hint.innerText = "Busque o marcador ralo160...";
+           // hint.innerText = "Busque o marcador ralo160...";
         } else {
             console.error("MindAR system não encontrado na cena.");
         }
@@ -25,17 +25,17 @@ window.onload = () => {
 
     target.addEventListener("targetFound", () => {
         if (!estaTravado) {
-            hint.innerText = "Alinhe a moldura e confirme";
+           // hint.innerText = "Alinhe a moldura e confirme";
             btnTravar.style.display = "block";
         }
     });
 
-    target.addEventListener("targetLost", () => {
-        if (!estaTravado) {
-            hint.innerText = "Buscando marcador...";
-            btnTravar.style.display = "none";
-        }
-    });
+   // target.addEventListener("targetLost", () => {
+    //    if (!estaTravado) {
+    //        hint.innerText = "Buscando marcador...";
+    //        btnTravar.style.display = "none";
+    //    }
+    //});
 
    // btnTravar.onclick = () => {
    //     estaTravado = true;
@@ -52,7 +52,7 @@ window.onload = () => {
         estaTravado = false;
         btnReset.style.display = "none";
         wireframe.setAttribute('visible', true);
-        hint.innerText = "Busque o marcador ralo160...";
+       // hint.innerText = "Busque o marcador ralo160...";
         sceneEl.systems['mindar-image-system'].start();
     };
 };
