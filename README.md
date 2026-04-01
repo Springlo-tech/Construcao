@@ -1,5 +1,5 @@
 🛠️ AR Manual Técnico - Visualização de Produto em WebAR
-Este projeto é uma prova de conceito (PoC) de um Manual Técnico em Realidade Aumentada desenvolvido para a web. O objetivo é transformar manuais de montagem estáticos em experiências interativas,
+Este projeto é de um Manual Técnico em Realidade Aumentada desenvolvido para a web. O objetivo é transformar manuais de montagem estáticos em experiências interativas,
 facilitando a visualização e manutenção de produtos.
 
 Utilizando MindAR, o sistema reconhece um marcador específico  e projeta camadas de informações sobrepostas ao mundo real.
@@ -16,20 +16,13 @@ A interface oferece três modos de interação para o usuário:
 🛠️ Tecnologias Utilizadas
 MindAR.js: Biblioteca de AR de código aberto para rastreamento de imagens.
 
-A-Frame: Framework web para construção de experiências de realidade virtual e aumentada.
+A-Frame: Framework web para construção de experiências de realidade aumentada.
 
 Blender: Utilizado para a modelagem 3D, texturização e criação da animação de montagem (Exploded View).
 
 HTML5/CSS3/JavaScript: Para a interface de usuário (UI) e lógica de troca de estados dos modelos.
 
-📂 Estrutura do Projeto
-/markers: Contém o arquivo .mind (marcador treinado).
-
-/assets/modelos: Modelos 3D no formato .glb otimizados para web.
-
-/js: Lógica de controle de visibilidade e eventos de clique.
-
-🔧 Como Testar
+Como Testar
 Acesse o link do projeto (ex: via GitHub Pages).
 
 Permita o acesso à câmera do seu dispositivo.
